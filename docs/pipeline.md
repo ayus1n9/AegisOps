@@ -45,3 +45,25 @@ The pipeline generates an OASIS SARIF v2.1.0 document consolidating findings acr
 1. Navigate to your GitHub repository -> **Settings** -> **Code security and analysis**.
 2. Enable **GitHub Advanced Security** (for private repositories) or verify that code scanning is active (free for public repositories).
 3. The `upload-sarif` job automatically publishes findings to the **Security** tab under **Code scanning alerts**.
+
+---
+
+## 4. Live Verification & CI/CD Run Proof
+
+In the live GitHub Actions environment, the pipeline executed across all 9 parallel jobs on the `main` branch:
+
+```
+✓ main SecureFlow DevSecOps Pipeline · Run #39118221923
+Status: Success (All 9 jobs passed)
+
+JOBS:
+✓ Unit Tests & Linting (Node 22, Python 3.12, Vitest, Jest, Pytest)
+✓ Gitleaks Secret Scanning
+✓ SAST (Semgrep & Bandit)
+✓ SCA Dependency Auditing (npm audit --omit=dev & pip-audit)
+✓ IaC Security (Checkov on Dockerfiles & Compose)
+✓ Container Build & Trivy Scan (Multi-stage build & CVE scan)
+✓ Ephemeral DAST (OWASP ZAP against running Compose stack)
+✓ Central Security Policy Gate (Fail-closed evaluation & report consolidation)
+✓ Publish SARIF to GitHub Code Scanning (OASIS SARIF v2.1.0 publication)
+```
