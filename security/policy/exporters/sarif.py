@@ -90,7 +90,7 @@ class SARIFExporter:
                         "driver": {
                             "name": "SecureFlow Central Policy Engine",
                             "semanticVersion": "1.0.0",
-                            "informationUri": "https://github.com/ayus1n9/secureflow-devsecops",
+                            "informationUri": "https://github.com/ayus1n9/SecureFlow",
                             "rules": list(rules_map.values()),
                         }
                     },

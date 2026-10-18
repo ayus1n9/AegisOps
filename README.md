@@ -1,6 +1,6 @@
 # SecureFlow: Production-Minded DevSecOps Security Pipeline
 
-[![CI Security Pipeline](https://github.com/ayus1n9/secureflow-devsecops/actions/workflows/security-pipeline.yml/badge.svg)](https://github.com/ayus1n9/secureflow-devsecops/actions/workflows/security-pipeline.yml)
+[![CI Security Pipeline](https://github.com/ayus1n9/SecureFlow/actions/workflows/security-pipeline.yml/badge.svg)](https://github.com/ayus1n9/SecureFlow/actions/workflows/security-pipeline.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Compose_v2-2496ED?logo=docker&logoColor=white)](compose.yaml)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](services/python-service/)
@@ -171,8 +171,8 @@ Every acceptance criterion has been validated in the live environment:
 ### 1. Setup & Installation
 ```bash
 # Clone the repository
-git clone https://github.com/ayus1n9/secureflow-devsecops.git
-cd secureflow-devsecops
+git clone https://github.com/ayus1n9/SecureFlow.git
+cd SecureFlow
 
 # Install all dependencies across frontend, API, Python, and policy engine
 make setup
@@ -262,7 +262,7 @@ Use these verified, ATS-friendly bullets based on features engineered in this pr
 
 ## 10. Repository Presentation
 
-- **Repository Name**: `secureflow-devsecops`
+- **Repository Name**: `SecureFlow`
 - **Short Description**: "An automated DevSecOps security pipeline integrating secret scanning, SAST, dependency auditing, container vulnerability assessment, DAST, security policy enforcement, SBOM generation, and security reporting into a reproducible CI/CD workflow."
 - **GitHub Topics**: `devsecops`, `application-security`, `security-automation`, `ci-cd`, `github-actions`, `container-security`, `trivy`, `semgrep`, `gitleaks`, `owasp-zap`, `sbom`, `cosign`, `sarif`, `policy-as-code`.
 

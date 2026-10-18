@@ -13,14 +13,16 @@ RUN npm run build
 # Stage 2: Hardened, minimal production runtime
 FROM node:22-alpine
 
-# Install dumb-init for proper PID 1 signal forwarding and zombie reaping
-RUN apk add --no-cache dumb-init
+# Install dumb-init and ensure system libraries are up to date
+RUN apk update && apk add --no-cache dumb-init && apk upgrade --no-cache zlib
 
 WORKDIR /app
 
-# Install production-only dependencies
+# Install production-only dependencies and remove npm/npx tools from runtime to minimize attack surface
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci --omit=dev && \
+    npm cache clean --force && \
+    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
 
 # Copy compiled JavaScript output
 COPY --from=builder /app/dist ./dist

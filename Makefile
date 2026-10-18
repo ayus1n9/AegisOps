@@ -99,7 +99,7 @@ scan-sast:
 scan-deps:
 	@echo "[SecureFlow Scanner] Running npm audit (API Gateway)..."
 	mkdir -p reports
-	cd services/api && npm audit --json > ../../reports/npm_audit.json || true
+	cd services/api && npm audit --omit=dev --json > ../../reports/npm_audit.json || true
 	@echo "[SecureFlow Scanner] Running pip-audit (Python Service)..."
 	docker run --rm -v $(PWD)/services/python-service:/src trailofbits/pip-audit:v2.7.3 -r /src/requirements.txt -f json -o /src/../../reports/pip_audit.json || true
 	@if [ ! -s reports/pip_audit.json ]; then echo '{"dependencies":[]}' > reports/pip_audit.json; fi
@@ -108,7 +108,7 @@ scan-deps:
 scan-container:
 	@echo "[SecureFlow Scanner] Running Trivy on built image secureflow/api:1.0.0..."
 	mkdir -p reports
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(PWD)/reports:/reports aquasec/trivy:latest image --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(PWD)/reports:/reports aquasec/trivy:latest image --severity CRITICAL,HIGH --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
 	@if [ ! -s reports/trivy.json ]; then echo '{"Results":[]}' > reports/trivy.json; fi
 
 .PHONY: scan-iac

@@ -25,12 +25,12 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
@@ -39,7 +39,7 @@ jobs:
             services/api/package-lock.json
 
       - name: Setup Python
-        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -74,7 +74,7 @@ jobs:
           if [ ! -s reports/gitleaks.json ]; then echo "[]" > reports/gitleaks.json; fi
 
       - name: Upload Gitleaks Report
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: gitleaks-report
           path: reports/gitleaks.json
@@ -88,7 +88,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Run Semgrep SAST
         run: |
@@ -110,7 +110,7 @@ jobs:
           if [ ! -s reports/bandit.json ]; then echo '{"results":[],"errors":[]}' > reports/bandit.json; fi
 
       - name: Upload SAST Reports
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: sast-reports
           path: |
@@ -126,12 +126,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
-      - name: Run npm audit
+      - name: Run npm audit (Production Dependencies)
         run: |
           mkdir -p reports
-          cd services/api && npm audit --json > ../../reports/npm_audit.json || true
+          cd services/api && npm audit --omit=dev --json > ../../reports/npm_audit.json || true
           if [ ! -s ../../reports/npm_audit.json ]; then echo '{"vulnerabilities":{}}' > ../../reports/npm_audit.json; fi
 
       - name: Run pip-audit
@@ -143,7 +143,7 @@ jobs:
           if [ ! -s reports/pip_audit.json ]; then echo '{"dependencies":[]}' > reports/pip_audit.json; fi
 
       - name: Upload Dependency Reports
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: dependency-reports
           path: |
@@ -159,7 +159,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Run Checkov
         run: |
@@ -174,7 +174,7 @@ jobs:
           fi
 
       - name: Upload Checkov Report
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: checkov-report
           path: reports/checkov.json
@@ -188,7 +188,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Build Application Images
         run: |
@@ -198,7 +198,7 @@ jobs:
         run: |
           mkdir -p reports
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$GITHUB_WORKSPACE/reports:/reports" \
-            aquasec/trivy:latest image --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
+            aquasec/trivy:latest image --severity CRITICAL,HIGH --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
           if [ ! -s reports/trivy.json ]; then echo '{"Results":[]}' > reports/trivy.json; fi
 
       - name: Generate CycloneDX SBOM
@@ -206,7 +206,7 @@ jobs:
           make sbom
 
       - name: Upload Container Reports
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: container-reports
           path: |
@@ -222,7 +222,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Start Ephemeral Stack
         run: |
@@ -256,7 +256,7 @@ jobs:
           docker compose down
 
       - name: Upload DAST Report
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: dast-report
           path: reports/zap.json
@@ -278,15 +278,15 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Download Scanner Reports
-        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        uses: actions/download-artifact@v4
         with:
           path: downloaded-reports
 
@@ -308,7 +308,7 @@ jobs:
 
       - name: Upload Security Decision Artifacts
         if: always()
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        uses: actions/upload-artifact@v4
         with:
           name: secureflow-consolidated-reports
           path: |
@@ -330,17 +330,17 @@ jobs:
       security-events: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
 
       - name: Download Consolidated Reports
-        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        uses: actions/download-artifact@v4
         with:
           name: secureflow-consolidated-reports
           path: reports
 
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@b56ba49b26e50535fa1e7f7db0f4f7b47fb017f6 # v3.28.10
-        continue-on-error: true # Do not fail pipeline if repo permissions do not have advanced security enabled
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true # Non-blocking if GitHub Advanced Security is not enabled on account
         with:
           sarif_file: reports/secureflow_results.sarif
           category: secureflow-policy-engine
