@@ -272,4 +272,4 @@ Use these verified, ATS-friendly bullets based on features engineered in this pr
 
 - **License**: [MIT License](LICENSE)
 - **Security Policy & Vulnerability Disclosure**: [SECURITY.md](SECURITY.md)
-- **Maintainer**: Ayush Singh (`singhayush0919@gmail.com`)
+- **Maintainer**: Ayush Singh
