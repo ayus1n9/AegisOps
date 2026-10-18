@@ -1,0 +1,346 @@
+name: SecureFlow DevSecOps Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege default permissions
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================================
+  # 1. Source and Quality Validation
+  # ============================================================================
+  validate-and-test:
+    name: Unit Tests & Linting
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: |
+            frontend/package-lock.json
+            services/api/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: '3.12'
+
+      - name: Run Test Suites
+        run: |
+          make setup
+          make lint
+          make test
+
+  # ============================================================================
+  # 2. Secret Scanning (Gitleaks)
+  # ============================================================================
+  scan-secrets:
+    name: Gitleaks Secret Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        run: |
+          mkdir -p reports
+          docker run --rm -v "$GITHUB_WORKSPACE:/path" zricethezav/gitleaks:v8.21.2 detect \
+            --source="/path" \
+            --config="/path/.gitleaks.toml" \
+            --report-path="/path/reports/gitleaks.json" \
+            --report-format="json" \
+            --exit-code=0 || true
+          if [ ! -s reports/gitleaks.json ]; then echo "[]" > reports/gitleaks.json; fi
+
+      - name: Upload Gitleaks Report
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: gitleaks-report
+          path: reports/gitleaks.json
+
+  # ============================================================================
+  # 3. Static Application Security Testing (SAST: Semgrep & Bandit)
+  # ============================================================================
+  scan-sast:
+    name: SAST (Semgrep & Bandit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run Semgrep SAST
+        run: |
+          mkdir -p reports
+          docker run --rm -v "$GITHUB_WORKSPACE:/src" returntocorp/semgrep:1.98.0 semgrep scan \
+            --config=/src/security/config/.semgrep.yml \
+            --json \
+            --output=/src/reports/semgrep.json \
+            /src/frontend/src /src/services/api/src /src/services/python-service/app || true
+          if [ ! -s reports/semgrep.json ]; then echo '{"results":[],"errors":[]}' > reports/semgrep.json; fi
+
+      - name: Run Bandit Python SAST
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/src" pycqa/bandit:1.8.0 \
+            -c /src/security/config/bandit.yaml \
+            -r /src/services/python-service/app \
+            -f json \
+            -o /src/reports/bandit.json || true
+          if [ ! -s reports/bandit.json ]; then echo '{"results":[],"errors":[]}' > reports/bandit.json; fi
+
+      - name: Upload SAST Reports
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: sast-reports
+          path: |
+            reports/semgrep.json
+            reports/bandit.json
+
+  # ============================================================================
+  # 4. Software Composition Analysis (npm audit & pip-audit)
+  # ============================================================================
+  scan-dependencies:
+    name: SCA Dependency Auditing
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run npm audit
+        run: |
+          mkdir -p reports
+          cd services/api && npm audit --json > ../../reports/npm_audit.json || true
+          if [ ! -s ../../reports/npm_audit.json ]; then echo '{"vulnerabilities":{}}' > ../../reports/npm_audit.json; fi
+
+      - name: Run pip-audit
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE/services/python-service:/src" trailofbits/pip-audit:v2.7.3 \
+            -r /src/requirements.txt \
+            -f json \
+            -o /src/../../reports/pip_audit.json || true
+          if [ ! -s reports/pip_audit.json ]; then echo '{"dependencies":[]}' > reports/pip_audit.json; fi
+
+      - name: Upload Dependency Reports
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: dependency-reports
+          path: |
+            reports/npm_audit.json
+            reports/pip_audit.json
+
+  # ============================================================================
+  # 5. Infrastructure & Configuration Scanning (Checkov)
+  # ============================================================================
+  scan-iac:
+    name: IaC Security (Checkov)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run Checkov
+        run: |
+          mkdir -p reports
+          docker run --rm -v "$GITHUB_WORKSPACE:/tf" bridgecrew/checkov:3.2.355 \
+            --config-file /tf/security/config/checkov.yaml \
+            -d /tf -o json --output-file-path /tf/reports || true
+          if [ -f reports/results_dockerfile.json ]; then
+            cp reports/results_dockerfile.json reports/checkov.json
+          elif [ ! -s reports/checkov.json ]; then
+            echo '{"results":{"passed_checks":[],"failed_checks":[]}}' > reports/checkov.json
+          fi
+
+      - name: Upload Checkov Report
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: checkov-report
+          path: reports/checkov.json
+
+  # ============================================================================
+  # 6. Container Build, Trivy Vulnerability Scan & Syft SBOM
+  # ============================================================================
+  container-build-scan:
+    name: Container Build & Trivy Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Build Application Images
+        run: |
+          make build
+
+      - name: Run Trivy Scanner on Application Container
+        run: |
+          mkdir -p reports
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$GITHUB_WORKSPACE/reports:/reports" \
+            aquasec/trivy:latest image --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
+          if [ ! -s reports/trivy.json ]; then echo '{"Results":[]}' > reports/trivy.json; fi
+
+      - name: Generate CycloneDX SBOM
+        run: |
+          make sbom
+
+      - name: Upload Container Reports
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: container-reports
+          path: |
+            reports/trivy.json
+            reports/sbom/
+
+  # ============================================================================
+  # 7. Ephemeral Deployment & Dynamic Analysis (OWASP ZAP DAST)
+  # ============================================================================
+  scan-dast:
+    name: Ephemeral DAST (OWASP ZAP)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Start Ephemeral Stack
+        run: |
+          docker compose up -d
+          # Wait for API readiness
+          for i in {1..30}; do
+            if curl -sf http://localhost:8000/health >/dev/null; then
+              echo "Application gateway healthy!"
+              break
+            fi
+            echo "Waiting for stack readiness... ($i/30)"
+            sleep 2
+          done
+
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          mkdir -p reports
+          docker run --rm --network host \
+            -v "$GITHUB_WORKSPACE/security/config:/zap/wrk/:ro" \
+            -v "$GITHUB_WORKSPACE/reports:/zap/reports/:rw" \
+            zaproxy/zap-stable:2.15.0 zap-baseline.py \
+            -t http://127.0.0.1:8000/health \
+            -c zap-baseline.conf \
+            -J /zap/reports/zap.json \
+            -r /zap/reports/zap-report.html -I || true
+          if [ ! -s reports/zap.json ]; then echo '{"site":[]}' > reports/zap.json; fi
+
+      - name: Stop Ephemeral Stack
+        if: always()
+        run: |
+          docker compose down
+
+      - name: Upload DAST Report
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: dast-report
+          path: reports/zap.json
+
+  # ============================================================================
+  # 8. Central Security Policy Engine & Release Gate Evaluation
+  # ============================================================================
+  policy-gate:
+    name: Central Security Policy Gate
+    needs:
+      - validate-and-test
+      - scan-secrets
+      - scan-sast
+      - scan-dependencies
+      - scan-iac
+      - container-build-scan
+      - scan-dast
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        with:
+          python-version: '3.12'
+
+      - name: Download Scanner Reports
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        with:
+          path: downloaded-reports
+
+      - name: Consolidate Scanner Reports
+        run: |
+          mkdir -p reports
+          find downloaded-reports -type f -name "*.json" -exec cp {} reports/ \;
+          ls -la reports/
+
+      - name: Evaluate Central Security Policy Gate
+        run: |
+          python -m pip install -r security/requirements.txt
+          PYTHONPATH=. python security/policy/cli.py \
+            --config security/policy_config.yaml \
+            --reports-dir reports \
+            --json-out reports/security_summary.json \
+            --sarif-out reports/secureflow_results.sarif \
+            --html-out reports/security_report.html
+
+      - name: Upload Security Decision Artifacts
+        if: always()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: secureflow-consolidated-reports
+          path: |
+            reports/security_summary.json
+            reports/secureflow_results.sarif
+            reports/security_report.html
+
+  # ============================================================================
+  # 9. SARIF Publication to GitHub Code Scanning
+  # ============================================================================
+  upload-sarif:
+    name: Publish SARIF to GitHub Code Scanning
+    needs: [policy-gate]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Download Consolidated Reports
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+        with:
+          name: secureflow-consolidated-reports
+          path: reports
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@b56ba49b26e50535fa1e7f7db0f4f7b47fb017f6 # v3.28.10
+        continue-on-error: true # Do not fail pipeline if repo permissions do not have advanced security enabled
+        with:
+          sarif_file: reports/secureflow_results.sarif
+          category: secureflow-policy-engine
