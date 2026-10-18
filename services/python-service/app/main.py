@@ -1,4 +1,4 @@
-"""FastAPI Application entrypoint for SecureFlow Python Security Service."""
+"""FastAPI Application entrypoint for AegisOps Python Security Service."""
 import logging
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
@@ -17,10 +17,10 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
-logger = logging.getLogger("secureflow-python-service")
+logger = logging.getLogger("aegisops-python-service")
 
 app = FastAPI(
-    title="SecureFlow Python Security Microservice",
+    title="AegisOps Python Security Microservice",
     version="1.0.0",
     docs_url="/docs",
     redoc_url=None,  # Disabled to minimize attack surface
@@ -71,7 +71,7 @@ async def health_check():
     """Liveness probe."""
     return HealthResponse(
         status="healthy",
-        service="secureflow-python-service",
+        service="aegisops-python-service",
         version="1.0.0",
     )
 

@@ -1,4 +1,4 @@
-name: SecureFlow DevSecOps Pipeline
+name: AegisOps DevSecOps Pipeline
 
 on:
   push:
@@ -198,7 +198,7 @@ jobs:
         run: |
           mkdir -p reports
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$GITHUB_WORKSPACE/reports:/reports" \
-            aquasec/trivy:latest image --severity CRITICAL,HIGH --format json --output /reports/trivy.json secureflow/api:1.0.0 || true
+            aquasec/trivy:latest image --severity CRITICAL,HIGH --format json --output /reports/trivy.json aegisops/api:1.0.0 || true
           if [ ! -s reports/trivy.json ]; then echo '{"Results":[]}' > reports/trivy.json; fi
 
       - name: Generate CycloneDX SBOM
@@ -303,17 +303,17 @@ jobs:
             --config security/policy_config.yaml \
             --reports-dir reports \
             --json-out reports/security_summary.json \
-            --sarif-out reports/secureflow_results.sarif \
+            --sarif-out reports/aegisops_results.sarif \
             --html-out reports/security_report.html
 
       - name: Upload Security Decision Artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: secureflow-consolidated-reports
+          name: aegisops-consolidated-reports
           path: |
             reports/security_summary.json
-            reports/secureflow_results.sarif
+            reports/aegisops_results.sarif
             reports/security_report.html
 
   # ============================================================================
@@ -335,12 +335,12 @@ jobs:
       - name: Download Consolidated Reports
         uses: actions/download-artifact@v4
         with:
-          name: secureflow-consolidated-reports
+          name: aegisops-consolidated-reports
           path: reports
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         continue-on-error: true # Non-blocking if GitHub Advanced Security is not enabled on account
         with:
-          sarif_file: reports/secureflow_results.sarif
-          category: secureflow-policy-engine
+          sarif_file: reports/aegisops_results.sarif
+          category: aegisops-policy-engine

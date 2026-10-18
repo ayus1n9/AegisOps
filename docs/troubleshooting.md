@@ -1,4 +1,4 @@
-# SecureFlow Troubleshooting & Operational Playbook
+# AegisOps Troubleshooting & Operational Playbook
 
 ## 1. Common Pipeline Failures & Resolutions
 

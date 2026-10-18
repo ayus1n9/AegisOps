@@ -1,4 +1,4 @@
-# Multi-stage hardened build for SecureFlow Frontend
+# Multi-stage hardened build for AegisOps Frontend
 # Stage 1: Build static assets
 FROM node:22-alpine AS builder
 

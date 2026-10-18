@@ -11,7 +11,7 @@ def test_health_endpoint():
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
-    assert data["service"] == "secureflow-python-service"
+    assert data["service"] == "aegisops-python-service"
     assert "version" in data
 
 
@@ -23,7 +23,7 @@ def test_readiness_endpoint():
 
 def test_analyze_endpoint_valid():
     payload = {
-        "target_name": "secureflow-api:1.0.0",
+        "target_name": "aegisops-api:1.0.0",
         "artifact_type": "container_image",
         "environment": "production",
         "parameters": {"user": 10001},
@@ -31,7 +31,7 @@ def test_analyze_endpoint_valid():
     response = client.post("/analyze", json=payload)
     assert response.status_code == 200
     data = response.json()
-    assert data["target_name"] == "secureflow-api:1.0.0"
+    assert data["target_name"] == "aegisops-api:1.0.0"
     assert data["risk_level"] == "CLEAN"
     assert data["is_releasable"] is True
 

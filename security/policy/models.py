@@ -1,4 +1,4 @@
-"""Normalized data models for SecureFlow Central Security Policy Engine."""
+"""Normalized data models for AegisOps Central Security Policy Engine."""
 from __future__ import annotations
 
 import hashlib

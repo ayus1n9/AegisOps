@@ -78,7 +78,7 @@ export const App: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.025em' }}>
-              SecureFlow <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 400 }}>DevSecOps Pipeline</span>
+              AegisOps <span style={{ color: '#38bdf8', fontSize: '1rem', fontWeight: 400 }}>DevSecOps Pipeline</span>
             </h1>
             <p style={{ margin: '0.25rem 0 0 0', color: '#94a3b8', fontSize: '0.875rem' }}>
               Automated Secret Scanning, SAST, SCA, Container Security, DAST & Policy Gate
@@ -121,7 +121,7 @@ export const App: React.FC = () => {
       </main>
 
       <footer style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid #1e293b', textAlign: 'center', color: '#64748b', fontSize: '0.8125rem' }}>
-        SecureFlow DevSecOps Pipeline • Production Verification & Enforcement
+        AegisOps DevSecOps Pipeline • Production Verification & Enforcement
       </footer>
     </div>
   );

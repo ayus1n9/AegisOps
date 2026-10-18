@@ -1,4 +1,4 @@
-# Checkov Scanner Configuration for SecureFlow
+# Checkov Scanner Configuration for AegisOps
 framework:
   - dockerfile
   - compose

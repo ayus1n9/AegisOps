@@ -1,4 +1,4 @@
-# Bandit Configuration for SecureFlow Python Services
+# Bandit Configuration for AegisOps Python Services
 # Target high and medium confidence findings
 skips:
   - B101  # Skip assert used in test files (tests are excluded via CLI)

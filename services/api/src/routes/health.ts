@@ -5,7 +5,7 @@ const router = Router();
 router.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'healthy',
-    service: 'secureflow-api',
+    service: 'aegisops-api',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
   });

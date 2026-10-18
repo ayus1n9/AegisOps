@@ -26,7 +26,7 @@ def test_gitleaks_parser_finding_and_secret_redaction():
     findings, exec_stat = parser.parse(os.path.join(FIXTURES_DIR, "gitleaks_finding.json"))
     assert len(findings) == 1
     f = findings[0]
-    assert f.rule_id == "secureflow-internal-api-key"
+    assert f.rule_id == "aegisops-internal-api-key"
     assert f.severity == Severity.CRITICAL
     assert f.is_secret is True
     # Secret must never be leaked in cleartext evidence
@@ -39,7 +39,7 @@ def test_semgrep_parser():
     findings, exec_stat = parser.parse(os.path.join(FIXTURES_DIR, "semgrep_finding.json"))
     assert len(findings) == 1
     f = findings[0]
-    assert f.rule_id == "secureflow-no-eval"
+    assert f.rule_id == "aegisops-no-eval"
     assert f.severity == Severity.HIGH
     assert f.location.file_path == "frontend/src/bad.ts"
     assert f.location.start_line == 4

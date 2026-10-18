@@ -21,7 +21,7 @@ export function errorHandler(
   }
 
   // Generic sanitized error response (never leak internal stack trace)
-  console.error('[SecureFlow API Error]:', err.message);
+  console.error('[AegisOps API Error]:', err.message);
   res.status(500).json({
     error: 'Internal Server Error',
     message: 'An unexpected security-monitored error occurred.',

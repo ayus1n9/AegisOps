@@ -1,4 +1,4 @@
-# Multi-stage hardened build for SecureFlow Node.js API Gateway
+# Multi-stage hardened build for AegisOps Node.js API Gateway
 # Stage 1: Build TypeScript source
 FROM node:22-alpine AS builder
 

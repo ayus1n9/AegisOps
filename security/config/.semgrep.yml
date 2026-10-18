@@ -1,5 +1,5 @@
 rules:
-  - id: secureflow-no-eval
+  - id: aegisops-no-eval
     patterns:
       - pattern: eval(...)
     message: "Detected dangerous use of 'eval()'. Dynamic evaluation of untrusted code leads to arbitrary code execution."
@@ -11,7 +11,7 @@ rules:
       category: security
       confidence: HIGH
 
-  - id: secureflow-no-insecure-hash
+  - id: aegisops-no-insecure-hash
     patterns:
       - pattern-either:
           - pattern: hashlib.md5(...)
@@ -24,7 +24,7 @@ rules:
       owasp: "A02:2021 - Cryptographic Failures"
       category: security
 
-  - id: secureflow-no-shell-true
+  - id: aegisops-no-shell-true
     patterns:
       - pattern: subprocess.$FUNC(..., shell=True, ...)
     message: "Detected 'subprocess' invocation with 'shell=True'. This is a high-risk pattern for OS command injection."
@@ -36,7 +36,7 @@ rules:
       category: security
       confidence: HIGH
 
-  - id: secureflow-no-dangerous-html
+  - id: aegisops-no-dangerous-html
     patterns:
       - pattern: <$EL dangerouslySetInnerHTML={...} />
     message: "Detected 'dangerouslySetInnerHTML' in React. Unsanitized input can cause Cross-Site Scripting (XSS)."

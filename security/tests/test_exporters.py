@@ -27,10 +27,10 @@ def test_sarif_exporter_valid_structure():
     assert "$schema" in sarif
     assert len(sarif["runs"]) == 1
     driver = sarif["runs"][0]["tool"]["driver"]
-    assert driver["name"] == "SecureFlow Central Policy Engine"
+    assert driver["name"] == "AegisOps Central Policy Engine"
     results = sarif["runs"][0]["results"]
     assert len(results) == 1
-    assert results[0]["ruleId"] == "secureflow-no-eval"
+    assert results[0]["ruleId"] == "aegisops-no-eval"
     assert results[0]["level"] == "error"
 
 
@@ -50,6 +50,6 @@ def test_html_exporter_generates_dashboard():
     html_out = HTMLReportGenerator.generate(result)
 
     assert "<!DOCTYPE html>" in html_out
-    assert "SecureFlow DevSecOps Security Gate" in html_out
+    assert "AegisOps DevSecOps Security Gate" in html_out
     assert "RELEASE ELIGIBLE" in html_out
     assert "TOTAL FINDINGS" in html_out

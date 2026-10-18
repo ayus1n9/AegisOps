@@ -1,8 +1,8 @@
-# SecureFlow Architecture & Engineering Specification
+# AegisOps Architecture & Engineering Specification
 
 ## 1. System Overview
 
-SecureFlow is an end-to-end, multi-tier DevSecOps security automation platform designed to provide automated security verification, vulnerability assessment, supply chain protection, and centralized policy enforcement across every phase of the Software Development Life Cycle (SDLC).
+AegisOps is an end-to-end, multi-tier DevSecOps security automation platform designed to provide automated security verification, vulnerability assessment, supply chain protection, and centralized policy enforcement across every phase of the Software Development Life Cycle (SDLC).
 
 ```mermaid
 graph TD
@@ -10,7 +10,7 @@ graph TD
         Browser["User Web Browser"]
     end
 
-    subgraph "Application Runtime (Docker Bridge Network: secureflow-internal-net)"
+    subgraph "Application Runtime (Docker Bridge Network: aegisops-internal-net)"
         FE["Frontend (React 19 + Vite)<br/>Port 3000<br/>Non-Root: nginx (UID 101)<br/>Read-Only RootFS"]
         API["API Gateway (Express + TypeScript)<br/>Port 8000<br/>Non-Root: node (UID 1000)<br/>Read-Only RootFS"]
         PY["Analytics Service (FastAPI + Python)<br/>Port 5000 (Internal Only)<br/>Non-Root: appuser (UID 10001)<br/>Read-Only RootFS"]
@@ -97,9 +97,9 @@ graph TD
 
 | Service | Container Name | Internal Port | Host Port | Network | User (UID/GID) | Filesystem |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Frontend | `secureflow-frontend` | 3000 | 3000 | `secureflow-net` | 101:101 | Read-Only |
-| API Gateway | `secureflow-api` | 8000 | 8000 | `secureflow-net` | 1000:1000 | Read-Only |
-| Python Service | `secureflow-python-service` | 5000 | *None* | `secureflow-net` | 10001:10001 | Read-Only |
+| Frontend | `aegisops-frontend` | 3000 | 3000 | `aegisops-net` | 101:101 | Read-Only |
+| API Gateway | `aegisops-api` | 8000 | 8000 | `aegisops-net` | 1000:1000 | Read-Only |
+| Python Service | `aegisops-python-service` | 5000 | *None* | `aegisops-net` | 10001:10001 | Read-Only |
 
 ### Network Isolation Guarantee
-The Python microservice is completely unexposed to external networks. Communication is strictly routed via the internal Docker bridge network `secureflow-internal-net`, enforcing the API gateway as the single authorized ingress point.
+The Python microservice is completely unexposed to external networks. Communication is strictly routed via the internal Docker bridge network `aegisops-internal-net`, enforcing the API gateway as the single authorized ingress point.

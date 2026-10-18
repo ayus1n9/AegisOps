@@ -11,12 +11,12 @@ Only the latest release on the `main` branch is actively supported with security
 
 ## Reporting a Vulnerability
 
-The SecureFlow project takes vulnerability management and responsible disclosure seriously.
+The AegisOps project takes vulnerability management and responsible disclosure seriously.
 
 If you believe you have found a security vulnerability in this project:
 
 1. **Do not open a public issue.** Publicly disclosing vulnerabilities exposes systems before remediation can take place.
-2. Email the maintainer directly at `singhayush0919@gmail.com` with the subject line `[SECURITY] SecureFlow Vulnerability Report`.
+2. Email the maintainer directly at `singhayush0919@gmail.com` with the subject line `[SECURITY] AegisOps Vulnerability Report`.
 3. Provide a clear description of the vulnerability, including:
    - Affected component(s)
    - Step-by-step reproduction instructions or proof-of-concept
@@ -28,7 +28,7 @@ If you believe you have found a security vulnerability in this project:
 - Triage and severity assessment: within 48 hours.
 - Fix delivery and advisory release: within 14 days (or earlier depending on CVSS severity).
 
-## SecureFlow DevSecOps Principles
+## AegisOps DevSecOps Principles
 
 All contributions undergo automated pre-commit and CI/CD validation:
 - Zero committed secrets (enforced via Gitleaks)

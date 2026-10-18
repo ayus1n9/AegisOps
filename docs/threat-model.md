@@ -1,8 +1,8 @@
-# SecureFlow Threat Model & STRIDE Risk Assessment
+# AegisOps Threat Model & STRIDE Risk Assessment
 
 ## 1. Overview & Methodology
 
-This document details the threat model for the SecureFlow application stack and DevSecOps security pipeline. The evaluation follows the **STRIDE** methodology (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) and analyzes threats across both runtime application components and build-time CI/CD workflows.
+This document details the threat model for the AegisOps application stack and DevSecOps security pipeline. The evaluation follows the **STRIDE** methodology (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) and analyzes threats across both runtime application components and build-time CI/CD workflows.
 
 ---
 

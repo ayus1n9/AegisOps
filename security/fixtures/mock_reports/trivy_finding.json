@@ -1,9 +1,9 @@
 {
   "SchemaVersion": 2,
-  "ArtifactName": "secureflow/api:1.0.0",
+  "ArtifactName": "aegisops/api:1.0.0",
   "Results": [
     {
-      "Target": "secureflow/api:1.0.0",
+      "Target": "aegisops/api:1.0.0",
       "Class": "os-pkgs",
       "Vulnerabilities": [
         {

@@ -1,7 +1,7 @@
 [project]
-name = "secureflow-python-service"
+name = "aegisops-python-service"
 version = "1.0.0"
-description = "SecureFlow Core Security Analytics Microservice"
+description = "AegisOps Core Security Analytics Microservice"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

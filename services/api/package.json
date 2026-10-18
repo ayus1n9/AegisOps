@@ -1,7 +1,7 @@
 {
-  "name": "secureflow-api",
+  "name": "aegisops-api",
   "version": "1.0.0",
-  "description": "SecureFlow Express & TypeScript Backend API Gateway",
+  "description": "AegisOps Express & TypeScript Backend API Gateway",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

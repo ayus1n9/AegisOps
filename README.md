@@ -1,6 +1,6 @@
-# SecureFlow: Production-Minded DevSecOps Security Pipeline
+# AegisOps: Production-Minded DevSecOps Security Pipeline
 
-[![CI Security Pipeline](https://github.com/ayus1n9/SecureFlow/actions/workflows/security-pipeline.yml/badge.svg)](https://github.com/ayus1n9/SecureFlow/actions/workflows/security-pipeline.yml)
+[![CI Security Pipeline](https://github.com/ayus1n9/AegisOps/actions/workflows/security-pipeline.yml/badge.svg)](https://github.com/ayus1n9/AegisOps/actions/workflows/security-pipeline.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Compose_v2-2496ED?logo=docker&logoColor=white)](compose.yaml)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](services/python-service/)
@@ -16,7 +16,7 @@
 
 Modern software engineering faces acute supply chain risks, secret leaks, and critical container misconfigurations. Traditional CI/CD setups often treat security as an afterthought or rely on disconnected, noisy scanner exit codes that developers routinely bypass or ignore.
 
-**SecureFlow** solves this problem by engineering a reproducible, production-minded DevSecOps architecture where:
+**AegisOps** solves this problem by engineering a reproducible, production-minded DevSecOps architecture where:
 - Every tier of the application stack (React, Node.js API, Python microservice) is containerized and hardened using least-privilege configurations (non-root users, read-only root filesystems, dropped capabilities).
 - Eight complementary security scanning tools run across distinct SDLC phases.
 - A custom **Central Security Policy Engine** normalizes multi-scanner outputs into a unified schema, enforces deterministic severity thresholds, validates scoped exception lifecycles with mandatory expiration, and implements a strict **fail-closed** release gate.
@@ -26,11 +26,11 @@ Modern software engineering faces acute supply chain risks, secret leaks, and cr
 
 ## 2. Architecture & System Design
 
-SecureFlow connects three decoupled application services running in an isolated Docker bridge network, backed by automated security tooling.
+AegisOps connects three decoupled application services running in an isolated Docker bridge network, backed by automated security tooling.
 
 ```mermaid
 graph TD
-    subgraph "Application Runtime (Docker Network: secureflow-internal-net)"
+    subgraph "Application Runtime (Docker Network: aegisops-internal-net)"
         FE["Frontend (React 19 + TypeScript)<br/>Port 3000 | Non-Root: nginx (UID 101)<br/>Read-Only RootFS | CSP Enabled"]
         API["API Gateway (Express + TypeScript)<br/>Port 8000 | Non-Root: node (UID 1000)<br/>Helmet | Rate-Limiter | Zod Validation"]
         PY["Analytics Service (FastAPI + Python)<br/>Port 5000 (Internal Only) | Non-Root: appuser (UID 10001)<br/>Pydantic v2 | Safe Exception Handling"]
@@ -88,7 +88,7 @@ graph TD
 | **Bandit** | Python AST SAST | Python analytics service | CI Stage 3 | JSON (`results[]`) | High-severity findings (e.g. `eval`, `shell=True`) | Python only; flags static syntax rather than runtime taint |
 | **npm audit** | JavaScript SCA | `frontend/` & `services/api/` | CI Stage 4 | JSON (v2 Audit) | Critical/High CVEs in production dependency trees | Limited to cataloged advisories; blind to zero-days |
 | **pip-audit** | Python SCA | Python `requirements.txt` | CI Stage 4 | JSON (`dependencies[]`) | Published PyPI/OSV vulnerabilities | Requires network access to PyPI advisory database |
-| **Trivy** | Container Security | Built image (`secureflow/api`) | CI Stage 6 | JSON (`Results[]`) | Critical/High OS or package vulnerabilities | Custom binaries compiled from source lack package metadata |
+| **Trivy** | Container Security | Built image (`aegisops/api`) | CI Stage 6 | JSON (`Results[]`) | Critical/High OS or package vulnerabilities | Custom binaries compiled from source lack package metadata |
 | **Checkov** | IaC Security | Dockerfiles & Compose | CI Stage 5 | JSON (`failed_checks`) | High misconfigurations (e.g. root container user) | Syntax-driven; cannot infer host kernel isolation flags |
 | **OWASP ZAP** | Ephemeral DAST | Running API (`:8000/health`) | CI Stage 7 | JSON & HTML | Missing CSP, missing anti-clickjacking headers | Baseline mode does not execute deep authentication fuzzing |
 | **Syft** | Supply Chain SBOM | Container images | CI Stage 6 | CycloneDX / SPDX JSON | Invalid SBOM schema or zero components parsed | Output reflects package manager index state |
@@ -98,7 +98,7 @@ graph TD
 
 ## 5. Central Security Policy Engine
 
-The heart of SecureFlow is the Python-based **Central Security Policy Engine** (`security/policy/`). Rather than relying on disparate scanner exit codes, the engine provides structured, programmatic security governance.
+The heart of AegisOps is the Python-based **Central Security Policy Engine** (`security/policy/`). Rather than relying on disparate scanner exit codes, the engine provides structured, programmatic security governance.
 
 ### Core Capabilities:
 1. **Normalized Schema**: Converts raw findings from all 8 scanners into a common typed model (`Finding`), standardizing rule IDs, severities, file paths, line ranges, remediations, and evidence.
@@ -171,8 +171,8 @@ Every acceptance criterion has been validated in the live environment:
 ### 1. Setup & Installation
 ```bash
 # Clone the repository
-git clone https://github.com/ayus1n9/SecureFlow.git
-cd SecureFlow
+git clone https://github.com/ayus1n9/AegisOps.git
+cd AegisOps
 
 # Install all dependencies across frontend, API, Python, and policy engine
 make setup
@@ -262,7 +262,7 @@ Use these verified, ATS-friendly bullets based on features engineered in this pr
 
 ## 10. Repository Presentation
 
-- **Repository Name**: `SecureFlow`
+- **Repository Name**: `AegisOps`
 - **Short Description**: "An automated DevSecOps security pipeline integrating secret scanning, SAST, dependency auditing, container vulnerability assessment, DAST, security policy enforcement, SBOM generation, and security reporting into a reproducible CI/CD workflow."
 - **GitHub Topics**: `devsecops`, `application-security`, `security-automation`, `ci-cd`, `github-actions`, `container-security`, `trivy`, `semgrep`, `gitleaks`, `owasp-zap`, `sbom`, `cosign`, `sarif`, `policy-as-code`.
 

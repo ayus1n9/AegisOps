@@ -1,8 +1,8 @@
 # ==============================================================================
-# SecureFlow Central Security Policy Engine Configuration
+# AegisOps Central Security Policy Engine Configuration
 # ==============================================================================
 version: "1.0.0"
-policy_name: "SecureFlow Enterprise DevSecOps Standard"
+policy_name: "AegisOps Enterprise DevSecOps Standard"
 
 # Severity Failure Thresholds
 # Any findings matching or exceeding these levels fail the release gate.
@@ -35,7 +35,7 @@ required_scanners:
 suppressions:
   - id: "SUP-001"
     scanner: "semgrep"
-    rule_id: "secureflow-no-insecure-hash"
+    rule_id: "aegisops-no-insecure-hash"
     component: "security/fixtures"
     reason: "Synthetic MD5 hash intentionally included in test fixture for scanner validation"
     approved_by: "AppSec-Team"

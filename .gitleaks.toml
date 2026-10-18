@@ -1,11 +1,11 @@
 # ==============================================================================
-# SecureFlow DevSecOps: Gitleaks Configuration
+# AegisOps DevSecOps: Gitleaks Configuration
 # ==============================================================================
 # This configuration extends Gitleaks default ruleset with strict detection
 # and documented, scoped exceptions for synthetic test fixtures.
 # ==============================================================================
 
-title = "SecureFlow Secret Scanning Policy"
+title = "AegisOps Secret Scanning Policy"
 
 [extend]
 useDefault = true
@@ -27,8 +27,8 @@ regexes = [
 ]
 
 [[rules]]
-id = "secureflow-internal-api-key"
-description = "Detected potential SecureFlow internal service communication key"
-regex = '''(?i)(?:secureflow|sf)[-_]?(?:secret|key|token)\s*[:=]\s*['"][A-Za-z0-9_\-]{24,}['"]'''
+id = "aegisops-internal-api-key"
+description = "Detected potential AegisOps internal service communication key"
+regex = '''(?i)(?:aegisops|ao|sf)[-_]?(?:secret|key|token)\s*[:=]\s*['"][A-Za-z0-9_\-]{24,}['"]'''
 secretGroup = 0
-keywords = ["secureflow", "sf_secret", "sf_key"]
+keywords = ["aegisops", "ao_secret", "sf_secret", "sf_key"]

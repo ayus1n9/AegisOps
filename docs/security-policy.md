@@ -1,8 +1,8 @@
-# SecureFlow Security Policy & Governance Specification
+# AegisOps Security Policy & Governance Specification
 
 ## 1. Governance Principles
 
-The SecureFlow DevSecOps pipeline enforces automated, deterministic security gates. Development velocity must not come at the expense of security posture, nor should developers be overwhelmed with unprioritized alerts.
+The AegisOps DevSecOps pipeline enforces automated, deterministic security gates. Development velocity must not come at the expense of security posture, nor should developers be overwhelmed with unprioritized alerts.
 
 ### Release Gate Criteria
 A build is certified **ELIGIBLE FOR RELEASE** if and only if:

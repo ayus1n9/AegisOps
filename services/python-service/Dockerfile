@@ -1,4 +1,4 @@
-# Multi-stage hardened build for SecureFlow Python Security Service
+# Multi-stage hardened build for AegisOps Python Security Service
 # Stage 1: Dependency builder
 FROM python:3.12-slim AS builder
 

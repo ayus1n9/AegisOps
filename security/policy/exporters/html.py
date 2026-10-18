@@ -59,7 +59,7 @@ class HTMLReportGenerator:
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SecureFlow Security Gate Report</title>
+    <title>AegisOps Security Gate Report</title>
     <style>
         body {{ margin: 0; padding: 2rem; background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }}
         .container {{ max-width: 1200px; margin: 0 auto; }}
@@ -77,7 +77,7 @@ class HTMLReportGenerator:
     <div class="container">
         <div class="header">
             <div>
-                <h1 style="margin:0; font-size: 1.75rem;">SecureFlow DevSecOps Security Gate</h1>
+                <h1 style="margin:0; font-size: 1.75rem;">AegisOps DevSecOps Security Gate</h1>
                 <p style="margin:4px 0 0 0; color:#94a3b8;">Policy: {html.escape(result.policy_name)} | Evaluated: {result.evaluated_at}</p>
             </div>
             <div>

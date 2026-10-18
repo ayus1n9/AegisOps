@@ -1,4 +1,4 @@
-"""Data models for SecureFlow Python Security Service."""
+"""Data models for AegisOps Python Security Service."""
 import re
 from datetime import datetime, timezone
 from enum import Enum

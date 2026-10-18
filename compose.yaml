@@ -3,8 +3,8 @@ services:
     build:
       context: ./services/python-service
       dockerfile: Dockerfile
-    image: secureflow/python-service:1.0.0
-    container_name: secureflow-python-service
+    image: aegisops/python-service:1.0.0
+    container_name: aegisops-python-service
     read_only: true
     cap_drop:
       - ALL
@@ -19,7 +19,7 @@ services:
     expose:
       - "5000"
     networks:
-      - secureflow-net
+      - aegisops-net
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health', timeout=2)"]
@@ -32,8 +32,8 @@ services:
     build:
       context: ./services/api
       dockerfile: Dockerfile
-    image: secureflow/api:1.0.0
-    container_name: secureflow-api
+    image: aegisops/api:1.0.0
+    container_name: aegisops-api
     read_only: true
     cap_drop:
       - ALL
@@ -55,7 +55,7 @@ services:
       python-service:
         condition: service_healthy
     networks:
-      - secureflow-net
+      - aegisops-net
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
@@ -68,8 +68,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: secureflow/frontend:1.0.0
-    container_name: secureflow-frontend
+    image: aegisops/frontend:1.0.0
+    container_name: aegisops-frontend
     read_only: true
     cap_drop:
       - ALL
@@ -85,7 +85,7 @@ services:
       api:
         condition: service_healthy
     networks:
-      - secureflow-net
+      - aegisops-net
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/health"]
@@ -95,6 +95,6 @@ services:
       start_period: 5s
 
 networks:
-  secureflow-net:
+  aegisops-net:
     driver: bridge
-    name: secureflow-internal-net
+    name: aegisops-internal-net

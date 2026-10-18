@@ -1,4 +1,4 @@
-# SecureFlow Security Capabilities & Known Limitations
+# AegisOps Security Capabilities & Known Limitations
 
 ## 1. Scanner Coverage Boundaries
 
@@ -24,7 +24,7 @@ No security toolchain provides absolute vulnerability prevention. DevSecOps auto
 
 ## 2. Fail-Closed Design Implications
 
-SecureFlow enforces a strict fail-closed posture:
+AegisOps enforces a strict fail-closed posture:
 - A network failure downloading a scanner image will fail the pipeline rather than allowing an unverified release.
 - A missing scanner JSON report blocks release eligibility.
 - While this guarantees security integrity, teams must maintain resilient network access and container cache registries to prevent developer friction.

@@ -1,7 +1,7 @@
 [project]
-name = "secureflow-policy-engine"
+name = "aegisops-policy-engine"
 version = "1.0.0"
-description = "SecureFlow DevSecOps Central Security Policy Engine"
+description = "AegisOps DevSecOps Central Security Policy Engine"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

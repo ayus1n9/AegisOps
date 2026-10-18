@@ -25,7 +25,7 @@ def test_valid_active_suppression_allows_finding():
         {
             "id": "SUP-TEST",
             "scanner": "semgrep",
-            "rule_id": "secureflow-no-eval",
+            "rule_id": "aegisops-no-eval",
             "component": "frontend",
             "reason": "Documented testing exception",
             "approved_by": "Security-Lead",
@@ -60,7 +60,7 @@ def test_expired_suppression_is_rejected_and_blocks():
         {
             "id": "SUP-EXPIRED",
             "scanner": "semgrep",
-            "rule_id": "secureflow-no-eval",
+            "rule_id": "aegisops-no-eval",
             "component": "frontend",
             "reason": "Expired temporary grace period",
             "approved_by": "Security-Lead",

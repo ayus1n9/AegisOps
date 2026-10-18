@@ -1,4 +1,4 @@
-# Trivy Scanner Configuration for SecureFlow
+# Trivy Scanner Configuration for AegisOps
 scan:
   scanners:
     - vuln

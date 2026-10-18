@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { App } from '../src/App';
 
-describe('SecureFlow Frontend Application', () => {
+describe('AegisOps Frontend Application', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
@@ -13,7 +13,7 @@ describe('SecureFlow Frontend Application', () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          system: 'SecureFlow DevSecOps Platform',
+          system: 'AegisOps DevSecOps Platform',
           version: '1.0.0',
           status: 'operational',
           services: {
@@ -54,7 +54,7 @@ describe('SecureFlow Frontend Application', () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: async () => ({
-          system: 'SecureFlow',
+          system: 'AegisOps',
           status: 'operational',
           services: { api: { status: 'healthy' }, pythonService: { available: true } },
           uptimeSeconds: 10,

@@ -6,7 +6,7 @@ interface AnalyzeFormProps {
 }
 
 export const AnalyzeForm: React.FC<AnalyzeFormProps> = ({ onSubmit, loading }) => {
-  const [targetName, setTargetName] = useState('secureflow-service:1.0.0');
+  const [targetName, setTargetName] = useState('aegisops-service:1.0.0');
   const [artifactType, setArtifactType] = useState('container_image');
   const [runAsRoot, setRunAsRoot] = useState(false);
   const [debugMode, setDebugMode] = useState(false);

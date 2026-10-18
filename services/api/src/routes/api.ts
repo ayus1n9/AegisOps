@@ -23,7 +23,7 @@ router.get('/status', async (_req: Request, res: Response, next: NextFunction) =
   try {
     const pythonHealth = await checkPythonHealth();
     res.status(200).json({
-      system: 'SecureFlow DevSecOps Platform',
+      system: 'AegisOps DevSecOps Platform',
       version: '1.0.0',
       status: pythonHealth.available ? 'operational' : 'degraded',
       services: {

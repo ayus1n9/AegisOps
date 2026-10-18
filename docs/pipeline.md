@@ -1,8 +1,8 @@
-# SecureFlow CI/CD Pipeline & GitHub Actions Specification
+# AegisOps CI/CD Pipeline & GitHub Actions Specification
 
 ## 1. Pipeline Execution Flow
 
-The SecureFlow CI/CD pipeline runs on pushes to `main`, pull requests, and manual triggers (`workflow_dispatch`). Independent security scanners execute in parallel across isolated ephemeral runners to minimize build times while preserving strict dependency boundaries.
+The AegisOps CI/CD pipeline runs on pushes to `main`, pull requests, and manual triggers (`workflow_dispatch`). Independent security scanners execute in parallel across isolated ephemeral runners to minimize build times while preserving strict dependency boundaries.
 
 ```mermaid
 graph TD
@@ -32,7 +32,7 @@ graph TD
 | `scan-iac` | Infrastructure Security | Checkov 3.2 | Docker container | 10 min | `reports/checkov.json` |
 | `container-build-scan` | Container & SBOM | Trivy, Syft v1.18 | Docker buildx | 15 min | `reports/trivy.json`, `reports/sbom/` |
 | `scan-dast` | Ephemeral DAST | OWASP ZAP 2.15 | Docker Compose + ZAP | 15 min | `reports/zap.json`, `zap-report.html` |
-| `policy-gate` | Security Gate | SecureFlow Policy Engine | Python 3.12 | 10 min | `security_summary.json`, `sarif`, `html` |
+| `policy-gate` | Security Gate | AegisOps Policy Engine | Python 3.12 | 10 min | `security_summary.json`, `sarif`, `html` |
 | `upload-sarif` | SARIF Publication | GitHub CodeQL Action | GitHub Runner | 5 min | GitHub Code Scanning Alerts |
 
 ---
@@ -53,7 +53,7 @@ The pipeline generates an OASIS SARIF v2.1.0 document consolidating findings acr
 In the live GitHub Actions environment, the pipeline executed across all 9 parallel jobs on the `main` branch:
 
 ```
-✓ main SecureFlow DevSecOps Pipeline · Run #39118221923
+✓ main AegisOps DevSecOps Pipeline · Run #39118221923
 Status: Success (All 9 jobs passed)
 
 JOBS:

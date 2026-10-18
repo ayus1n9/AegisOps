@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# SecureFlow DevSecOps: Software Bill of Materials (SBOM) Generator
+# AegisOps DevSecOps: Software Bill of Materials (SBOM) Generator
 # Generates industry-standard CycloneDX and SPDX SBOMs using Syft.
 # ==============================================================================
 set -euo pipefail
@@ -8,7 +8,7 @@ set -euo pipefail
 OUTPUT_DIR="${1:-reports/sbom}"
 mkdir -p "${OUTPUT_DIR}"
 
-echo "[SecureFlow SBOM] Generating CycloneDX SBOMs for application images..."
+echo "[AegisOps SBOM] Generating CycloneDX SBOMs for application images..."
 
 # Determine runner: local syft binary or docker containerized runner
 if command -v syft >/dev/null 2>&1; then
@@ -18,12 +18,12 @@ else
     SYFT_CMD="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd)/${OUTPUT_DIR}:/out anchore/syft:v1.18.0"
 fi
 
-IMAGES=("secureflow/api:1.0.0" "secureflow/frontend:1.0.0" "secureflow/python-service:1.0.0")
+IMAGES=("aegisops/api:1.0.0" "aegisops/frontend:1.0.0" "aegisops/python-service:1.0.0")
 
 for img in "${IMAGES[@]}"; do
     clean_name=$(echo "${img}" | tr '/:' '_')
     target_file="${OUTPUT_DIR}/${clean_name}.cyclonedx.json"
-    echo "[SecureFlow SBOM] Scanning ${img} -> ${target_file}"
+    echo "[AegisOps SBOM] Scanning ${img} -> ${target_file}"
 
     if command -v syft >/dev/null 2>&1; then
         syft "${img}" -o cyclonedx-json="${target_file}"
@@ -44,4 +44,4 @@ for img in "${IMAGES[@]}"; do
     fi
 done
 
-echo "[SecureFlow SBOM] Generation complete. Files saved in ${OUTPUT_DIR}/"
+echo "[AegisOps SBOM] Generation complete. Files saved in ${OUTPUT_DIR}/"

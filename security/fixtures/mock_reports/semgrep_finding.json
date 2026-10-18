@@ -1,7 +1,7 @@
 {
   "results": [
     {
-      "check_id": "secureflow-no-eval",
+      "check_id": "aegisops-no-eval",
       "path": "frontend/src/bad.ts",
       "start": { "line": 4, "col": 10 },
       "end": { "line": 4, "col": 25 },

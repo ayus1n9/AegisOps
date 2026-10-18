@@ -5,7 +5,7 @@ from security.policy.models import Decision, Finding, PolicyResult, Severity
 
 
 def severity_to_sarif_level(sev: Severity) -> str:
-    """Map SecureFlow severity to standard SARIF level."""
+    """Map AegisOps severity to standard SARIF level."""
     if sev in (Severity.CRITICAL, Severity.HIGH):
         return "error"
     elif sev == Severity.MEDIUM:
@@ -15,7 +15,7 @@ def severity_to_sarif_level(sev: Severity) -> str:
 
 
 class SARIFExporter:
-    """Transforms normalized SecureFlow findings into OASIS SARIF v2.1.0."""
+    """Transforms normalized AegisOps findings into OASIS SARIF v2.1.0."""
 
     @staticmethod
     def export(result: PolicyResult) -> Dict[str, Any]:
@@ -88,9 +88,9 @@ class SARIFExporter:
                 {
                     "tool": {
                         "driver": {
-                            "name": "SecureFlow Central Policy Engine",
+                            "name": "AegisOps Central Policy Engine",
                             "semanticVersion": "1.0.0",
-                            "informationUri": "https://github.com/ayus1n9/SecureFlow",
+                            "informationUri": "https://github.com/ayus1n9/AegisOps",
                             "rules": list(rules_map.values()),
                         }
                     },

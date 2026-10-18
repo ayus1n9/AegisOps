@@ -1,1 +1,1 @@
-"""Test package for SecureFlow Security Policy Engine."""
+"""Test package for AegisOps Security Policy Engine."""

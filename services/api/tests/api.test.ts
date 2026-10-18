@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../src/app';
 import * as pythonClient from '../src/services/pythonClient';
 
-describe('SecureFlow API Service Tests', () => {
+describe('AegisOps API Service Tests', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -12,7 +12,7 @@ describe('SecureFlow API Service Tests', () => {
       const res = await request(app).get('/health');
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('healthy');
-      expect(res.body.service).toBe('secureflow-api');
+      expect(res.body.service).toBe('aegisops-api');
     });
 
     it('GET /ready should return 200 and ready state', async () => {
@@ -32,7 +32,7 @@ describe('SecureFlow API Service Tests', () => {
     it('GET /api/v1/status should return system status with python service health', async () => {
       jest.spyOn(pythonClient, 'checkPythonHealth').mockResolvedValue({
         status: 'healthy',
-        service: 'secureflow-python-service',
+        service: 'aegisops-python-service',
         version: '1.0.0',
         available: true,
       });
@@ -54,7 +54,7 @@ describe('SecureFlow API Service Tests', () => {
     it('POST /api/v1/analyze should succeed with valid schema payload', async () => {
       const mockResult = {
         analysis_id: 'test-uuid-123',
-        target_name: 'secureflow-api:1.0.0',
+        target_name: 'aegisops-api:1.0.0',
         artifact_type: 'container_image',
         environment: 'production',
         risk_level: 'CLEAN',
@@ -68,7 +68,7 @@ describe('SecureFlow API Service Tests', () => {
       const res = await request(app)
         .post('/api/v1/analyze')
         .send({
-          targetName: 'secureflow-api:1.0.0',
+          targetName: 'aegisops-api:1.0.0',
           artifactType: 'container_image',
           environment: 'production',
           parameters: { user: 10001 },

@@ -11,7 +11,7 @@ from security.policy.exporters.html import HTMLReportGenerator
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="SecureFlow Central DevSecOps Security Policy Engine"
+        description="AegisOps Central DevSecOps Security Policy Engine"
     )
     parser.add_argument(
         "--config",
@@ -32,7 +32,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--sarif-out",
-        default="reports/secureflow_results.sarif",
+        default="reports/aegisops_results.sarif",
         help="Output path for consolidated SARIF v2.1.0 report",
     )
     parser.add_argument(
@@ -87,7 +87,7 @@ def main():
         f.write(html_content)
 
     print("\n" + "=" * 70)
-    print(" SecureFlow DevSecOps Central Security Gate Decision")
+    print(" AegisOps DevSecOps Central Security Gate Decision")
     print("=" * 70)
     print(f" Policy: {result.policy_name}")
     print(f" Status: {'ELIGIBLE FOR RELEASE' if result.is_releasable else 'RELEASE BLOCKED'}")

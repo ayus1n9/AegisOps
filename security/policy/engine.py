@@ -35,7 +35,7 @@ class SecurityPolicyEngine:
 
     def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
         default_config = {
-            "policy_name": "SecureFlow Default DevSecOps Policy",
+            "policy_name": "AegisOps Default DevSecOps Policy",
             "thresholds": {
                 "fail_on_severities": ["CRITICAL", "HIGH"],
                 "secrets_block_release": True,
@@ -242,7 +242,7 @@ class SecurityPolicyEngine:
 
         return PolicyResult(
             is_releasable=is_releasable,
-            policy_name=self.policy_config.get("policy_name", "SecureFlow Policy"),
+            policy_name=self.policy_config.get("policy_name", "AegisOps Policy"),
             total_findings=len(deduped_findings),
             findings_by_severity=severity_counts,
             blocking_findings_count=len(blocking_findings),
