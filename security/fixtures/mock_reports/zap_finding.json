@@ -1,0 +1,19 @@
+{
+  "@version": "2.14.0",
+  "site": [
+    {
+      "@name": "http://localhost:8000",
+      "alerts": [
+        {
+          "pluginId": "10038",
+          "alert": "Content Security Policy (CSP) Header Not Set",
+          "riskcode": "3",
+          "confidence": "2",
+          "riskdesc": "High (Medium)",
+          "desc": "Content Security Policy header is not set.",
+          "solution": "Ensure CSP header is enabled in reverse proxy or Helmet."
+        }
+      ]
+    }
+  ]
+}

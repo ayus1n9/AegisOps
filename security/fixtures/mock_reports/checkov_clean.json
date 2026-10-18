@@ -1,0 +1,7 @@
+{
+  "check_type": "dockerfile",
+  "results": {
+    "passed_checks": [{ "check_id": "CKV_DOCKER_1" }],
+    "failed_checks": []
+  }
+}

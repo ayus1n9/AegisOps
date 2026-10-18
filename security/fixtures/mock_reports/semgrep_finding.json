@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "check_id": "secureflow-no-eval",
+      "path": "frontend/src/bad.ts",
+      "start": { "line": 4, "col": 10 },
+      "end": { "line": 4, "col": 25 },
+      "extra": {
+        "message": "Detected dangerous use of 'eval()'",
+        "severity": "ERROR",
+        "metadata": { "owasp": "A03:2021" }
+      }
+    }
+  ],
+  "errors": []
+}

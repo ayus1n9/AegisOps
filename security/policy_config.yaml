@@ -1,0 +1,50 @@
+# ==============================================================================
+# SecureFlow Central Security Policy Engine Configuration
+# ==============================================================================
+version: "1.0.0"
+policy_name: "SecureFlow Enterprise DevSecOps Standard"
+
+# Severity Failure Thresholds
+# Any findings matching or exceeding these levels fail the release gate.
+thresholds:
+  fail_on_severities:
+    - CRITICAL
+    - HIGH
+  # Secrets automatically trigger a gate failure regardless of scanner severity
+  secrets_block_release: true
+  # Fail closed if a required scanner report is missing or contains execution errors
+  fail_on_missing_reports: true
+  fail_on_scanner_errors: true
+  # Unknown severities are treated as HIGH in strict mode, or MEDIUM in standard mode
+  treat_unknown_as: HIGH
+
+# Required Scanners
+# Every scanner in this list MUST execute and produce a valid report.
+required_scanners:
+  - gitleaks
+  - semgrep
+  - bandit
+  - npm_audit
+  - pip_audit
+  - trivy
+  - checkov
+  - zap
+
+# Documented & Scoped Vulnerability Exceptions (Suppressions)
+# Broad or unreviewed suppressions will be rejected by the policy engine.
+suppressions:
+  - id: "SUP-001"
+    scanner: "semgrep"
+    rule_id: "secureflow-no-insecure-hash"
+    component: "security/fixtures"
+    reason: "Synthetic MD5 hash intentionally included in test fixture for scanner validation"
+    approved_by: "AppSec-Team"
+    expires_at: "2027-12-31"
+
+  - id: "SUP-002"
+    scanner: "npm_audit"
+    rule_id: "GHSA-67hx-6x53-jw92"
+    component: "services/api/node_modules"
+    reason: "Transitive development dependency in jest/ts-jest cli runner. Not bundled into production runtime."
+    approved_by: "Security-Architect"
+    expires_at: "2027-12-31"

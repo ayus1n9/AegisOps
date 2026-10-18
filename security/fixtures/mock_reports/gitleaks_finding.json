@@ -1,0 +1,14 @@
+[
+  {
+    "Description": "Detected potential SecureFlow internal service communication key",
+    "StartLine": 2,
+    "EndLine": 2,
+    "StartColumn": 1,
+    "EndColumn": 40,
+    "Match": "sf_secret_FAKEabcdef1234567890abcdef12",
+    "Secret": "sf_secret_FAKEabcdef1234567890abcdef12",
+    "File": "security/fixtures/insecure_code/bad_secrets.env",
+    "RuleID": "secureflow-internal-api-key",
+    "Entropy": 4.1
+  }
+]

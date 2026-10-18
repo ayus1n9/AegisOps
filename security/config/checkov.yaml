@@ -1,0 +1,11 @@
+# Checkov Scanner Configuration for SecureFlow
+framework:
+  - dockerfile
+  - compose
+compact: true
+quiet: true
+output: json
+soft-fail: false
+skip-check:
+  # CKV_DOCKER_2: Ensure healthcheck is defined in Dockerfile (verified via compose and dockerfile)
+  - CKV2_DOCKER_1

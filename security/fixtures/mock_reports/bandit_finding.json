@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "code": "eval(user_input)",
+      "filename": "services/python-service/app/bad.py",
+      "issue_confidence": "HIGH",
+      "issue_severity": "HIGH",
+      "issue_text": "Use of possibly insecure function - consider using safer ast.literal_eval.",
+      "line_number": 6,
+      "line_range": [6],
+      "test_id": "B307",
+      "test_name": "blacklist"
+    }
+  ],
+  "errors": []
+}

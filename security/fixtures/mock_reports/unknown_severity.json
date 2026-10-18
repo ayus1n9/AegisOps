@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "check_id": "CUSTOM-001",
+      "path": "app/service.py",
+      "start": { "line": 10, "col": 1 },
+      "extra": {
+        "message": "Custom anomaly detected with non-standard severity",
+        "severity": "EMERGENCY_ANOMALY"
+      }
+    }
+  ],
+  "errors": []
+}

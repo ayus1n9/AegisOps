@@ -1,0 +1,24 @@
+# Bandit Configuration for SecureFlow Python Services
+# Target high and medium confidence findings
+skips:
+  - B101  # Skip assert used in test files (tests are excluded via CLI)
+tests:
+  - B102  # exec
+  - B103  # set_bad_file_permissions
+  - B104  # hardcoded_bind_all_interfaces
+  - B105  # hardcoded_password_string
+  - B106  # hardcoded_password_funcarg
+  - B107  # hardcoded_password_default
+  - B108  # hardcoded_tmp_directory
+  - B301  # pickle
+  - B302  # marshal
+  - B303  # md5
+  - B304  # ciphers
+  - B307  # eval
+  - B602  # subprocess_popen_with_shell_equals_true
+  - B608  # hardcoded_sql_expressions
+exclude_dirs:
+  - '/.venv'
+  - '/venv'
+  - '/tests'
+  - '/security/fixtures'

@@ -1,0 +1,16 @@
+{
+  "check_type": "dockerfile",
+  "results": {
+    "passed_checks": [],
+    "failed_checks": [
+      {
+        "check_id": "CKV_DOCKER_3",
+        "check_name": "Ensure that a user for the container has been created",
+        "file_path": "/Dockerfile",
+        "file_line_range": [1, 20],
+        "severity": "HIGH",
+        "guideline": "Add USER non-root to Dockerfile"
+      }
+    ]
+  }
+}

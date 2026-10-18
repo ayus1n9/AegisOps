@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "error_message": "Docker daemon unavailable: connection refused",
+  "exit_code": 1
+}

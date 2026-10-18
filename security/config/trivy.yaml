@@ -1,0 +1,15 @@
+# Trivy Scanner Configuration for SecureFlow
+scan:
+  scanners:
+    - vuln
+    - misconfig
+    - secret
+severity:
+  - UNKNOWN
+  - LOW
+  - MEDIUM
+  - HIGH
+  - CRITICAL
+format: json
+exit-code: 0
+ignore-unfixed: false

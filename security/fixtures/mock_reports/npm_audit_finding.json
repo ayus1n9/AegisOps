@@ -1,0 +1,23 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "insecure-pkg": {
+      "name": "insecure-pkg",
+      "severity": "critical",
+      "via": [
+        {
+          "title": "Remote Code Execution vulnerability in parsing",
+          "url": "https://github.com/advisories/GHSA-crit-0001",
+          "severity": "critical",
+          "range": "<2.0.0"
+        }
+      ],
+      "effects": [],
+      "range": "<2.0.0",
+      "fixAvailable": true
+    }
+  },
+  "metadata": {
+    "vulnerabilities": { "critical": 1 }
+  }
+}
