@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Build artifacts and caches
+dist/
+build/
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.eggs/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environment variables & local secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+cosign.key
+
+# Scanner and report outputs (ephemeral)
+reports/
+*.sarif
+scan_results/
+sbom-*.json
+zap-report.*
+
+# Temporary / Scratch files
+tmp/
+scratch/
+*.log
