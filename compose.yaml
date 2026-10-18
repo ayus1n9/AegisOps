@@ -1,0 +1,100 @@
+services:
+  python-service:
+    build:
+      context: ./services/python-service
+      dockerfile: Dockerfile
+    image: secureflow/python-service:1.0.0
+    container_name: secureflow-python-service
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    environment:
+      - PYTHON_ENV=production
+      - PYTHON_SERVICE_PORT=5000
+      - PYTHON_SERVICE_HOST=0.0.0.0
+    expose:
+      - "5000"
+    networks:
+      - secureflow-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    image: secureflow/api:1.0.0
+    container_name: secureflow-api
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - API_PORT=8000
+      - API_HOST=0.0.0.0
+      - CORS_ORIGIN=http://localhost:3000
+      - PYTHON_SERVICE_URL=http://python-service:5000
+      - RATE_LIMIT_WINDOW_MS=900000
+      - RATE_LIMIT_MAX_REQUESTS=100
+    depends_on:
+      python-service:
+        condition: service_healthy
+    networks:
+      - secureflow-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: secureflow/frontend:1.0.0
+    container_name: secureflow-frontend
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+      - /var/cache/nginx:rw,noexec,nosuid,size=64m
+      - /var/run:rw,noexec,nosuid,size=16m
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - secureflow-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+networks:
+  secureflow-net:
+    driver: bridge
+    name: secureflow-internal-net
